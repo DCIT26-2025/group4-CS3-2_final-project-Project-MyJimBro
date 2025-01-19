@@ -2,9 +2,9 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import { Button, SafeAreaView, Text, View } from "react-native";
 import { PieChart } from "react-native-chart-kit";
-import styles from "../../styles";
-import Addform from "../../add_expense";
-import ExpenseComponent from "../../expense_component";
+import styles from "./styles";
+import Addform from "./add_expense";
+import ExpenseComponent from "./expense_component";
 
 export default function App() {
 	// Define state variables using the useState hook
