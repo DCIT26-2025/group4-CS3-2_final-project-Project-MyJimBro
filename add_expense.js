@@ -21,14 +21,14 @@ export default function Addform({
 }) {
 	return (
 		<View>
-			<Text style={styles.heading3}>Add Form</Text>
+			<Text style={styles.heading3}>Add your gastusin:</Text>
 
 			{/* Input field for expense name */}
 			<Text style={styles.label}>Expense Name</Text>
 			<TextInput
 				onChangeText={(value) => setName(value)}
 				value={name}
-				style={styles.textInput}
+				style={{ ...styles.textInput, borderRadius: 100 }}
 				placeholder="Enter the expense name"
 			/>
 
@@ -42,29 +42,31 @@ export default function Addform({
 					setAmount(value);
 				}}
 				value={amount}
-				style={styles.textInput}
+				style={{ ...styles.textInput, borderRadius: 100 }}
 				placeholder="Amount"
 			/>
 
 			{/* Dropdown to select expense category */}
-			<Text style={styles.label}>Category</Text>
-			<Picker
-				style={styles.textInput}
-				selectedValue={category}
-				onValueChange={(itemValue, itemIndex) => setCategory(itemValue)}
-			>
-				{categories.map((category, index) => {
-					return (
-						<Picker.Item
-							key={index}
-							label={category}
-							value={category}
-						/>
-					);
-				})}
-			</Picker>
+						<Text style={styles.label}>Category</Text>
+						<View style={{ ...styles.textInput, borderRadius: 100 }}>
+							<Picker
+								style={{ borderRadius: 100 }}
+								selectedValue={category}
+								onValueChange={(itemValue, itemIndex) => setCategory(itemValue)}
+							>
+								{categories.map((category, index) => {
+									return (
+										<Picker.Item
+											key={index}
+											label={category}
+											value={category}
+										/>
+									);
+								})}
+							</Picker>
+						</View>
 
-			{/* Buttons to add or cancel expense */}
+						{/* Buttons to add or cancel expense */}
 			<View style={styles.row}>
 				{/* Add Expense button */}
 				<Button
@@ -100,8 +102,10 @@ export default function Addform({
 						setAddForm(false);
 						setName("");
 						setAmount("");
-						setCategory("Food");
+						setCategory("Pagkain");
 					}}
+					color={"green"}
+					
 					title="Add Expense"
 				/>
 
@@ -111,6 +115,7 @@ export default function Addform({
 					onPress={() => {
 						setAddForm(false);
 					}}
+					color={"red"}
 					title="Cancel"
 				/>
 			</View>

@@ -71,6 +71,7 @@ const ExpenseListTile = ({
 						},
 					]);
 				}}
+				color={"black"}
 				title="Delete"
 			/>
 		</View>

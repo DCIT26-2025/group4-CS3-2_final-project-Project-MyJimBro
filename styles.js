@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
 	row: {
 		flexDirection: "row",
 		justifyContent: "space-evenly",
+		
 	},
 	container: {
 		backgroundColor: "#fff",
@@ -13,7 +14,8 @@ const styles = StyleSheet.create({
 		marginTop: 50,
 	},
 	heading: {
-		color: "green",
+		marginTop: 20,
+		color: "blue",
 		fontSize: 30,
 		textAlign: "center",
 		fontWeight: "bold",
@@ -21,6 +23,7 @@ const styles = StyleSheet.create({
 	addButton: {
 		padding: 10,
 		margin: 10,
+		
 	},
 	heading2: {
 		color: "black",
@@ -35,7 +38,7 @@ const styles = StyleSheet.create({
 	},
 	label: {
 		color: "black",
-		fontSize: 16,
+		fontSize: 14,
 		textAlign: "left",
 		fontWeight: "bold",
 		marginLeft: 10,
@@ -48,14 +51,19 @@ const styles = StyleSheet.create({
 		width: "95%",
 		padding: 10,
 		margin: 10,
+		borderRadius: 20, // added rounded edge
 	},
 	expenseTileText: {
-		fontSize: 20,
-		width: "22%",
+		marginTop: 5,
+		fontSize: 16,
+		height: 26,
+		width: "25%",
 		textAlign: "center",
+		marginBottom: 5,
 	},
 	formAdd: {
 		// display: "none",
+		
 	},
 	textInput: {
 		borderRadius: 12,
@@ -64,5 +72,13 @@ const styles = StyleSheet.create({
 		padding: 10,
 		margin: 10,
 	},
+	totalExpenses: {
+		fontSize: 18,
+		fontWeight: "bold",
+		color: "green",  // You can change the color to suit your design
+		textAlign: "center",
+		marginVertical: 20,
+	  },
+	  
 });
 export default styles;
