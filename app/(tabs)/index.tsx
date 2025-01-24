@@ -1,71 +1,146 @@
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
-import { Button, SafeAreaView, Text, View, ScrollView } from "react-native";
+import { Button, SafeAreaView, Text, View, ScrollView, TextInput, Image } from "react-native";
 import { PieChart } from "react-native-chart-kit";
 import styles from "../../styles";
 import Addform from "../../add_expense";
 import ExpenseComponent from "../../expense_component";
+import logo from "../../assets/images/logo.png";
 
 export default function App() {
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
-  const [category, setCategory] = useState("Pagkain");
-  const [expenses, setExpenses] = useState<{ name: string; amount: number; category: string }[]>([]);
-  const categories = ["Pagkain", "Pamasahe", "Bills", "Others"];
+  const [category, setCategory] = useState("Food");
+  const [expenses, setExpenses] = useState<{ name: string; amount: number; category: string; id: number }[]>([]);
+  const categories = ["Food", "Travel", "Bills", "Others"];
   const [addForm, setAddForm] = useState(false);
-
-  const addExpense = () => {
-    setAddForm(true);
-  };
+  const [editForm, setEditForm] = useState(false);
+  const [editExpenseId, setEditExpenseId] = useState<number | null>(null);
 
   const [chartData, setChartData] = useState([
     {
-      name: "Pagkain",
+      name: "Food",
       amount: 0,
-      color: "#e62d20",
-      legendFontColor: "#7F7F7F",
+      color: "yellow",
+      legendFontColor: "white",
       legendFontSize: 15,
     },
     {
-      name: "Pamasahe",
+      name: "Travel",
       amount: 0,
-      color: "#27e620",
-      legendFontColor: "#7F7F7F",
+      color: "#ff7f50",
+      legendFontColor: "white",
       legendFontSize: 15,
     },
     {
       name: "Bills",
       amount: 0,
-      color: "#1c6bd9",
-      legendFontColor: "#7F7F7F",
+      color: "red",
+      legendFontColor: "white",
       legendFontSize: 15,
     },
     {
       name: "Others",
       amount: 0,
       color: "#5adbac",
-      legendFontColor: "#7F7F7F",
+      legendFontColor: "white",
       legendFontSize: 15,
     },
   ]);
 
-  // Function to calculate total expenses
+  const [monthlyLimit, setMonthlyLimit] = useState(0);
+  const [exceeded, setExceeded] = useState(false);
+
   const calculateTotalExpenses = () => {
     return expenses.reduce((total, expense) => total + expense.amount, 0);
   };
 
+  const calculateMonthlyExpenses = () => {
+    const currentMonth = new Date().getMonth();
+    return expenses.reduce((total, expense) => {
+      const expenseDate = new Date(expense.id);
+      if (expenseDate.getMonth() === currentMonth) {
+        return total + expense.amount;
+      }
+      return total;
+    }, 0);
+  };
+
+  useEffect(() => {
+    const monthlyExpenses = calculateMonthlyExpenses();
+
+    if (monthlyLimit > 0 && monthlyExpenses > monthlyLimit) {
+      setExceeded(true);
+    } else {
+      setExceeded(false);
+    }
+  }, [expenses, monthlyLimit]);
+
+  const addExpense = () => {
+    setAddForm(true);
+  };
+
+  const editExpense = (expense: { name: string; amount: number; category: string; id: number }) => {
+    setName(expense.name);
+    setAmount(expense.amount.toString());
+    setCategory(expense.category);
+    setEditExpenseId(expense.id);
+    setEditForm(true);
+  };
+
+  const saveEditedExpense = () => {
+    if (editExpenseId !== null) {
+      const updatedExpenses = expenses.map((expense) =>
+        expense.id === editExpenseId
+          ? { ...expense, name, amount: parseInt(amount), category }
+          : expense
+      );
+      setExpenses(updatedExpenses);
+
+      const updatedChartData = [...chartData];
+      const categoryIndex = updatedChartData.findIndex((item) => item.name === category);
+      updatedChartData[categoryIndex].amount = updatedExpenses.reduce(
+        (total, expense) => (expense.category === category ? total + expense.amount : total),
+        0
+      );
+      setChartData(updatedChartData);
+
+      setEditForm(false);
+      setName("");
+      setAmount("");
+      setCategory("Food");
+    }
+  };
+
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#333333" }}>
       <StatusBar style="auto" />
-      
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <Text style={styles.heading}>MyJimBros</Text>
+        {/* Add the logo here */}
+
+        <Text style={styles.heading}>MyJimBro's</Text>
+        <Image source={logo} style={{ width: 80, height: 80, alignSelf: "center", marginBottom: 20 }} />
         <Text style={styles.heading2}>Expense Tracker</Text>
 
-        {/* Display Total Expenses */}
         <Text style={styles.totalExpenses}>Total Expenses: ₱{calculateTotalExpenses()}</Text>
 
-        {/* Render the PieChart component with data */}
+        <View style={{ padding: 10 }}>
+          <Text style={styles.label}>Set Monthly Limit (₱)</Text>
+          <TextInput
+            keyboardType="numeric"
+            style={styles.textInput}
+            placeholder="Enter monthly limit"
+            value={monthlyLimit.toString()}
+            onChangeText={(value) => setMonthlyLimit(Number(value))}
+          />
+        </View>
+
+        {exceeded && (
+          <Text style={{ color: "red", textAlign: "center", marginTop: 10 }}>
+            Warning: You have exceeded your expense limit!
+          </Text>
+        )}
+
         <PieChart
           data={chartData}
           width={300}
@@ -82,8 +157,7 @@ export default function App() {
           style={{ marginLeft: 20, marginRight: 20 }}
         />
 
-        {/* Conditional rendering: If addForm is true, render the Addform component */}
-        {addForm === true ? (
+        {addForm ? (
           <Addform
             name={name}
             setName={setName}
@@ -101,21 +175,45 @@ export default function App() {
         ) : (
           <View style={styles.row}>
             <View style={styles.addButton}>
-              <Button
-                onPress={addExpense}
-                color="green"
-                title="Add Expense"
-              />
+              <Button onPress={addExpense} color="green" title="Add Expense" />
             </View>
           </View>
         )}
 
-        {/* Render the ExpenseComponent */}
+        {editForm && (
+          <View style={{ padding: 10 }}>
+            <Text style={styles.label}>Expense Name</Text>
+            <TextInput
+              style={styles.textInput}
+              value={name}
+              onChangeText={(text) => setName(text)}
+            />
+            <Text style={styles.label}>Amount</Text>
+            <TextInput
+              style={styles.textInput}
+              keyboardType="numeric"
+              value={amount}
+              onChangeText={(text) => setAmount(text)}
+            />
+            <Text style={styles.label}>Category</Text>
+            <TextInput
+              style={styles.textInput}
+              value={category}
+              onChangeText={(text) => setCategory(text)}
+            />
+            <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
+              <Button title="Save" onPress={saveEditedExpense} color="green" />
+              <Button title="Cancel" onPress={() => setEditForm(false)} color="red" />
+            </View>
+          </View>
+        )}
+
         <ExpenseComponent
           expenses={expenses}
           setExpenses={setExpenses}
           chartData={chartData}
           setChartData={setChartData}
+          editExpense={editExpense}
         />
       </ScrollView>
     </SafeAreaView>
