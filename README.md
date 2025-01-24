@@ -16,35 +16,27 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
     npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+## Or
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+2. Start the app
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+   ```bash
+    npm start
+   ```
 
-## Get a fresh project
 
-When you're ready, run:
 
-```bash
-npm run reset-project
-```
+   MyJimBro Expense Tracker
+Overview
+MyJimBro is a mobile app built with React Native that helps users track their expenses, categorize them, and visualize their spending through a pie chart. Users can set monthly limits for their expenses and receive warnings if they exceed the budget. The app allows for adding, editing, managing, and deleting expenses in various categories.
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Features
+Add, Edit, and Delete Expenses: Easily add new expenses, edit existing ones, and remove them.
+Categories: Expenses can be categorized into predefined categories (Food, Travel, Bills, Others).
+Monthly Limit: Set a monthly expense limit, with a warning displayed if the limit is exceeded.
+Expense Visualization: View a pie chart showing the distribution of expenses across categories.
+Expense List: See a detailed list of all expenses added, including options to edit and delete.
+Technologies Used
+React Native: A framework for building native apps using React.
+Expo: A framework and platform for universal React applications.
+React Hooks: Utilized for state management in the app.
